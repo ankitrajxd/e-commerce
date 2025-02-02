@@ -1,11 +1,14 @@
-import { Button } from "@/components/ui/button";
+import ProductList from "@/components/shared/product/product-list";
+import sampleData from "@/db/sample-data";
 import { Metadata } from "next";
 import React from "react";
 
 const HomePage = () => {
+  console.log(sampleData);
+
   return (
     <div>
-      <Button>Click me</Button>
+      <ProductList data={sampleData.products} limit={4} title="Latest Products" />
     </div>
   );
 };
