@@ -21,7 +21,7 @@ const Menu = () => {
             <ShoppingCart size={24} /> Cart
           </Button>
         </Link>
-        <Link href="/account">
+        <Link href="/sign-in">
           <Button variant="default" aria-label="Account" className="p-2">
             <UserIcon size={24} /> Sign In
           </Button>
@@ -45,7 +45,7 @@ const Menu = () => {
               </Link>
             </Button>
 
-            <Link href="/account">
+            <Link href="/sign-in">
               <Button variant="default" aria-label="Account" className="p-2">
                 <UserIcon size={24} /> Sign In
               </Button>
