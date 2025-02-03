@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 import "@/assets/styles/globals.css";
 import { APP_NAME, APP_DESCRIPTION, SERVER_URL } from "@/lib/constants";
 import { ThemeProvider } from "@/components/shared/header/theme-provider";
+import NextTopLoader from "nextjs-toploader";
 
 const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
@@ -32,6 +33,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <NextTopLoader />
           {children}
         </ThemeProvider>
       </body>
