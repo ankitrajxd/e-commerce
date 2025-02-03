@@ -5,10 +5,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { signUpWithCredentials } from "@/lib/actions/user.actions";
 import { signUpDefaultValues } from "@/lib/constants";
-import { Loader } from "lucide-react";
+import { Eye, EyeClosed, Loader } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 
 const SignUpForm = () => {
   const [data, action, pending] = useActionState(signUpWithCredentials, {
@@ -19,8 +19,10 @@ const SignUpForm = () => {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/";
 
+  const [show, setShow] = useState(false);
+
   return (
-    <form action={action}>
+    <form action={action} className="border p-4 rounded-lg w-[300px]">
       <input type="hidden" name="callbackUrl" value={callbackUrl} />
       <div className="space-y-4">
         <div>
@@ -57,16 +59,30 @@ const SignUpForm = () => {
           />
         </div>
 
-        <div>
+        <div className="relative">
           <Label htmlFor="confirmPassword">Confirm Password</Label>
           <Input
-            type="password"
+            type={show ? "text" : "password"}
             id="confirmPassword"
             name="confirmPassword"
             className="input"
             required
             defaultValue={signUpDefaultValues.confirmPassword}
           />
+          {show && (
+            <Eye
+              size={20}
+              onClick={() => setShow((prev) => !prev)}
+              className="absolute right-2 top-8 cursor-pointer"
+            />
+          )}
+          {!show && (
+            <EyeClosed
+              size={20}
+              onClick={() => setShow((prev) => !prev)}
+              className="absolute right-2 top-8 cursor-pointer"
+            />
+          )}
         </div>
         <div>
           <Button
@@ -81,7 +97,7 @@ const SignUpForm = () => {
         </div>
 
         {data && !data.success && (
-          <div className="text-red-500 text-center text-pretty text-sm">
+          <div className="text-red-500 text-center text-pretty text-xs">
             {data.message}
           </div>
         )}
