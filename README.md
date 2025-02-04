@@ -54,7 +54,7 @@ git clone <repoUrl>
 2. Install dependencies:
 
 ```bash
-npm install
+npm install or npm install --legacy-peer-deps 
 ```
 
 3. Create a `.env` file in the root directory and add the following environment variables:
