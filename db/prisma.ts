@@ -30,7 +30,3 @@ export const prisma = new PrismaClient({ adapter }).$extends({
     },
   },
 });
-
-export const config = {
-  runtime: "nodejs", // Enforce the Node.js runtime
-};

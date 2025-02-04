@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-export const runtime = "nodejs";
 import NextAuth, { NextAuthConfig } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "./db/prisma";
@@ -14,6 +13,8 @@ export const config = {
     signIn: "/sign-in",
     error: "/sign-in",
   },
+
+  trustHost: true,
 
   session: {
     strategy: "jwt",
