@@ -1,7 +1,7 @@
+import AddToCart from "@/components/shared/product/add-to-cart";
 import ProductImages from "@/components/shared/product/product-images";
 import ProductPrice from "@/components/shared/product/product-price";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { getProductBySlug } from "@/lib/actions/product.actions";
 import { notFound } from "next/navigation";
@@ -72,7 +72,16 @@ const ProductDetailPage = async ({ params }: Props) => {
                 {/* Add to cart button */}
                 {product.stock > 0 && (
                   <div className="flex-center mt-2">
-                    <Button className="w-full">Add to Cart</Button>
+                    <AddToCart
+                      item={{
+                        productId: product.id,
+                        name: product.name,
+                        price: product.price,
+                        image: product.images[0],
+                        slug: product.slug,
+                        qty: 1, // by default
+                      }}
+                    />
                   </div>
                 )}
               </div>
