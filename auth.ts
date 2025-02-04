@@ -5,6 +5,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "./db/prisma";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { compareSync } from "bcrypt-ts-edge";
+import { NextResponse } from "next/server";
 
 export const config = {
   pages: {
@@ -90,6 +91,30 @@ export const config = {
         session.user.name = user.name;
       }
       return session;
+    },
+
+    async authorized({ request, auth }: any) {
+      // check for session cart cookie
+      if (!request.cookies.get("sessionCartId")) {
+        // if no session cart id, generate one using crypto
+        const sessionCartId = crypto.randomUUID();
+
+        // clone the req headers
+        const newRequestHeaders = new Headers(request.headers);
+
+        // create new response and add the new headers
+        const response = NextResponse.next({
+          request: {
+            headers: newRequestHeaders,
+          },
+        });
+
+        // generate a cookie and set newly generate sessionCartId in the resoponse
+        response.cookies.set("sessionCartId", sessionCartId);
+        return response;
+      } else {
+        return true;
+      }
     },
   },
 } satisfies NextAuthConfig;
