@@ -1,6 +1,5 @@
 "use server";
 
-export const runtime = "nodejs";
 import { CartItem } from "@/types";
 import { convertToPlainObject, formatError } from "../utils";
 import { cookies } from "next/headers";
