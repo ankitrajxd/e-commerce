@@ -59,21 +59,6 @@ export const config = {
   ],
 
   callbacks: {
-    async session({ session, user, trigger, token }: any) {
-      // set the user id from the token
-      session.user.id = token.sub;
-      session.user.role = token.role;
-      session.user.name = token.name;
-
-      // console.log(session);
-
-      // if there is an update, set the user name
-      if (trigger === "update") {
-        session.user.name = user.name;
-      }
-      return session;
-    },
-
     async jwt({ token, user, trigger, session }: any) {
       // assign user fields to token
       if (user) {
@@ -91,6 +76,20 @@ export const config = {
       }
 
       return token;
+    },
+    async session({ session, user, trigger, token }: any) {
+      // set the user id from the token
+      session.user.id = token.sub;
+      session.user.role = token.role;
+      session.user.name = token.name;
+
+      // console.log(session);
+
+      // if there is an update, set the user name
+      if (trigger === "update") {
+        session.user.name = user.name;
+      }
+      return session;
     },
   },
 } satisfies NextAuthConfig;
