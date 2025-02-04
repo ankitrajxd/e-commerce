@@ -12,6 +12,7 @@ export const config = {
     signIn: "/sign-in",
     error: "/sign-in",
   },
+  trustHost: true,
 
   session: {
     strategy: "jwt",
