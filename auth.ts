@@ -82,7 +82,7 @@ export const config = {
       return token;
     },
     async session({ session, user, trigger, token }: any) {
-      // set the user id from the token
+      // set the user id from the token(that {} (object which contains user) is received from authorize callback above)
       session.user.id = token.sub;
       session.user.role = token.role;
       session.user.name = token.name;

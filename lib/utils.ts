@@ -59,3 +59,21 @@ export function sendResponse(
     message: formatError(message),
   };
 }
+
+// currency formatter
+const CURRENCY_FORMATTER = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+  minimumFractionDigits: 2,
+});
+
+// format currency using formatter above
+export function formatCurrency(value: number | string | null) {
+  if (typeof value === "number") {
+    return CURRENCY_FORMATTER.format(value);
+  } else if (typeof value === "string") {
+    return CURRENCY_FORMATTER.format(Number(value));
+  } else {
+    return "NaN";
+  }
+}

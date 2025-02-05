@@ -17,13 +17,14 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { addItemToCart, removeItemFromCart } from "@/lib/actions/cart.actions";
 import { Loader2, Minus, Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface Props {
   cart?: Cart;
 }
 
 const CartTable = ({ cart }: Props) => {
-  //   const router = useRouter();
+  const router = useRouter();
   const { toast } = useToast();
   const [isPending, startTransition] = useTransition();
 
@@ -121,6 +122,39 @@ const CartTable = ({ cart }: Props) => {
                 ))}
               </TableBody>
             </Table>
+          </div>
+
+          <div className="md:col-span-1">
+            <div className="flex flex-col gap-4">
+              <div className="flex justify-between">
+                <span>Subtotal</span>
+                <span>{cart.items.reduce((a, c) => a + c.qty, 0)}</span>
+              </div>
+
+              <div className="flex justify-between">
+                <span>Taxes and Charges</span>
+                <span>{cart.taxPrice || "Free"}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Shipping</span>
+                <span>{cart.shippingPrice && "Free"}</span>
+              </div>
+
+              <div className="flex justify-between">
+                <span>Total</span>
+                <span>${cart.totalPrice}</span>
+              </div>
+
+              <Button
+                className="w-full"
+                variant={"default"}
+                onClick={() => {
+                  router.push("/checkout");
+                }}
+              >
+                Proceed to Checkout
+              </Button>
+            </div>
           </div>
         </div>
       )}
