@@ -83,11 +83,12 @@ model VerificationToken {
 model Cart {
   id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId        String?  @db.Uuid
-  sessionCartId String?
+  sessionCartId String
   items         Json[]   @default([]) @db.Json
   itemsPrice    Decimal  @default(0) @db.Decimal(12, 2)
   shippingPrice Decimal  @default(0) @db.Decimal(12, 2)
   taxPrice      Decimal  @default(0) @db.Decimal(12, 2)
   createdAt     DateTime @default(now()) @db.Timestamp(6)
   user          User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  totalPrice    Decimal  @db.Decimal(12, 2)
 }
