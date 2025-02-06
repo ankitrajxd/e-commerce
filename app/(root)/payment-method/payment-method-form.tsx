@@ -15,7 +15,7 @@ import { updateUserPaymentMethod } from "@/lib/actions/user.actions";
 import { DEFAULT_PAYMENT_METHOD, PAYMENT_METHODS } from "@/lib/constants";
 import { paymentMethodSchema } from "@/lib/validators";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowRight, Loader } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
@@ -104,7 +104,12 @@ const PaymentMethodForm = ({ preferredPaymentMethod }: Props) => {
 
             <div className="flex gap-2">
               <Button type="submit" disabled={isPending}>
-                {isPending ? <Loader /> : <ArrowRight />} Continue
+                {isPending ? (
+                  <Loader2 className="animate-spin" />
+                ) : (
+                  <ArrowRight />
+                )}{" "}
+                Continue
               </Button>
             </div>
           </form>

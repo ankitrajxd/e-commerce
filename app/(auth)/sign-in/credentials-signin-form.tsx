@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { signInWithCredentials } from "@/lib/actions/user.actions";
 import { signInDefaultValues } from "@/lib/constants";
-import { Loader } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useActionState } from "react";
@@ -53,7 +53,7 @@ const CredentialsSignInForm = () => {
             type="submit"
             className="w-full flex gap-2"
           >
-            {pending && <Loader />}
+            {pending && <Loader2 className="animate-spin"/>}
             Sign In
           </Button>
         </div>

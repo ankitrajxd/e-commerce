@@ -1,14 +1,6 @@
 "use client";
 
-import { useToast } from "@/hooks/use-toast";
-import { shippingAddressSchema } from "@/lib/validators";
-import { ShippingAddress } from "@/types";
-import { useRouter } from "next/navigation";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { shippingAddressDefaultValues } from "@/lib/constants";
-import { ControllerRenderProps, SubmitHandler, useForm } from "react-hook-form";
-import { useTransition } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -18,9 +10,17 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { ArrowRight, Loader } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import { updateUserAddress } from "@/lib/actions/user.actions";
+import { shippingAddressDefaultValues } from "@/lib/constants";
+import { shippingAddressSchema } from "@/lib/validators";
+import { ShippingAddress } from "@/types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ArrowRight, Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
+import { ControllerRenderProps, SubmitHandler, useForm } from "react-hook-form";
+import { z } from "zod";
 
 interface Props {
   address: ShippingAddress;
@@ -182,7 +182,12 @@ const ShippingAddressForm = ({ address }: Props) => {
 
             <div className="flex gap-2">
               <Button type="submit" disabled={isPending}>
-                {isPending ? <Loader /> : <ArrowRight />} Continue
+                {isPending ? (
+                  <Loader2 className="animate-spin" />
+                ) : (
+                  <ArrowRight />
+                )}{" "}
+                Continue
               </Button>
             </div>
           </form>
