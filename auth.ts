@@ -67,6 +67,7 @@ export const config = {
       // assign user fields to token
       if (user) {
         token.role = user.role;
+        token.id = user.id;
         // if users has no name then use the email to extract the name
         if (user.name === "NO_NAME") {
           token.name = user.email.split("@")[0];
@@ -97,6 +98,24 @@ export const config = {
     },
 
     async authorized({ request, auth }: any) {
+      // array of regex pattern of paths we want to pretect
+      const protectedPaths = [
+        /\/shipping-address/,
+        /\/payment-method/,
+        /\/place-order/,
+        /\/profile/,
+        /\/user\/(.*)/,
+        /\/order\/(.*)/,
+        /\/admin/,
+      ];
+
+      // get pathname from the req url object
+      const { pathname } = request.nextUrl;
+      // check if user is not authenticated and accessing a protected path.
+      if (!auth && protectedPaths.some((path) => path.test(pathname))) {
+        return false;
+      }
+
       // check for session cart cookie
       if (!request.cookies.get("sessionCartId")) {
         // if no session cart id, generate one using crypto

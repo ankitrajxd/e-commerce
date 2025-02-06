@@ -16,7 +16,7 @@ import { useTransition } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { addItemToCart, removeItemFromCart } from "@/lib/actions/cart.actions";
-import { Loader2, Minus, Plus } from "lucide-react";
+import { ArrowRight, Loader2, Minus, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 interface Props {
@@ -27,6 +27,7 @@ const CartTable = ({ cart }: Props) => {
   const router = useRouter();
   const { toast } = useToast();
   const [isPending, startTransition] = useTransition();
+  const [isChechoutPending, startCheckoutTransition] = useTransition();
 
   return (
     <>
@@ -147,11 +148,19 @@ const CartTable = ({ cart }: Props) => {
 
               <Button
                 className="w-full"
+                disabled={isChechoutPending}
                 variant={"default"}
                 onClick={() => {
-                  router.push("/checkout");
+                  startCheckoutTransition(async () => {
+                    router.push("/shipping-address");
+                  });
                 }}
               >
+                {isChechoutPending ? (
+                  <Loader2 className="animate-spin" />
+                ) : (
+                  <ArrowRight />
+                )}
                 Proceed to Checkout
               </Button>
             </div>

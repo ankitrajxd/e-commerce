@@ -1,3 +1,5 @@
+import { ShippingAddress } from "@/types";
+
 export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME;
 export const APP_DESCRIPTION =
   process.env.NEXT_PUBLIC_APP_DESCRIPTION || "Modern Ecommerce store";
@@ -14,4 +16,12 @@ export const signUpDefaultValues = {
   email: "ankit@gmail.com",
   password: "12345",
   confirmPassword: "12345",
+};
+
+export const shippingAddressDefaultValues: ShippingAddress = {
+  fullName: "",
+  streetAddress: "",
+  city: "",
+  postalCode: "",
+  country: "",
 };

@@ -56,7 +56,7 @@ export function sendResponse(
 ) {
   return {
     success: success,
-    message: formatError(message),
+    message: typeof message === "string" ? message : formatError(message),
   };
 }
 
