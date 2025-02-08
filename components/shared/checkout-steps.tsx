@@ -11,7 +11,7 @@ const CheckoutSteps = ({ current = 0 }) => {
 
   return (
     <>
-      <div className="flex flex-col justify-center items-center md:flex-row gap-5 mb-10">
+      <div className="hidden md:flex flex-col justify-center items-center md:flex-row gap-5 mb-10 ">
         {steps.map((step, index) => (
           <React.Fragment key={index}>
             <div
