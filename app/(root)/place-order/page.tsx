@@ -92,7 +92,7 @@ const PlaceOrderPage = async () => {
                   </TableRow>
                 </TableHeader>
 
-                <TableBody>
+                <TableBody className="rounded-lg border">
                   {cart.items.map((item) => (
                     <TableRow key={item.slug}>
                       <TableCell>

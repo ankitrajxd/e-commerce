@@ -53,21 +53,30 @@ export async function addItemToCart(data: CartItem) {
       throw new Error("Product not found");
     }
 
+    const insertItem: CartItem = {
+      ...item,
+      price: product.price,
+      qty: 1,
+    };
+
     if (!cart) {
+      // check stock
+      if (product.stock < insertItem.qty) {
+        throw new Error("Product out of stock");
+      }
+
       // create a new cart object
       const newCart = insertCartSchema.parse({
         userId: userId,
-        items: [item],
+        items: [insertItem],
         sessionCartId: sessionCartId,
-        ...calcPrice([item]),
+        ...calcPrice([insertItem]),
       });
 
       // add to db
       await prisma.cart.create({
         data: newCart,
       });
-
-      console.log("cart created successfully");
 
       // revalidate product page
       revalidatePath(`/product/${product.slug}`);
@@ -96,7 +105,7 @@ export async function addItemToCart(data: CartItem) {
         }
 
         // add item to carts.etem
-        cart.items.push(item);
+        cart.items.push(insertItem);
       }
 
       // save to database
