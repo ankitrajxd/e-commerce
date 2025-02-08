@@ -18,6 +18,7 @@ import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import PlaceOrderBtn from "./place-order-btn";
 
 const PlaceOrderPage = async () => {
   const cart = await getMyCart();
@@ -141,7 +142,7 @@ const PlaceOrderPage = async () => {
                 <p>{formatCurrency(cart.totalPrice)}</p>
               </div>
               <div className="mt-4">
-                <Button>Place Order</Button>
+                <PlaceOrderBtn />
               </div>
             </CardContent>
           </Card>
