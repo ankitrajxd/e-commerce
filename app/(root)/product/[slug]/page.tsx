@@ -1,4 +1,5 @@
 import AddToCart from "@/components/shared/product/add-to-cart";
+import BuyNowButton from "@/components/shared/product/buy-now";
 import ProductImages from "@/components/shared/product/product-images";
 import ProductPrice from "@/components/shared/product/product-price";
 import { Badge } from "@/components/ui/badge";
@@ -74,7 +75,7 @@ const ProductDetailPage = async ({ params }: Props) => {
                 </div>
                 {/* Add to cart button */}
                 {product.stock > 0 && (
-                  <div className="flex-center mt-2">
+                  <div className="flex-center mt-2 mb-2">
                     <AddToCart
                       cart={cart}
                       item={{
@@ -88,6 +89,20 @@ const ProductDetailPage = async ({ params }: Props) => {
                     />
                   </div>
                 )}
+
+                {/* TODO:  Buy now button */}
+                {
+                  <BuyNowButton
+                    cartItem={{
+                      productId: product.id,
+                      name: product.name,
+                      price: product.price,
+                      image: product.images[0],
+                      slug: product.slug,
+                      qty: 1, // by default
+                    }}
+                  />
+                }
               </div>
             </CardContent>
           </Card>

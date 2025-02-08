@@ -213,3 +213,24 @@ export async function removeItemFromCart(productId: string) {
     return sendResponse(false, error);
   }
 }
+
+// buy now
+export async function buyNow(data: CartItem) {
+  try {
+    const response = await addItemToCart(data);
+    if (response.success) {
+      return {
+        success: true,
+        message: "Order created successfully",
+        redirectTo: "/cart",
+      };
+    } else {
+      return {
+        success: false,
+        message: response.message,
+      };
+    }
+  } catch (error) {
+    return sendResponse(false, error);
+  }
+}
