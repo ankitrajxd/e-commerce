@@ -15,12 +15,23 @@ import { Order } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import {
+  PayPalButtons,
+  PayPalScriptProvider,
+  usePayPalScriptReducer,
+} from "@paypal/react-paypal-js";
+import {
+  approvePaypalOrder,
+  createPaypalOrder,
+} from "@/lib/actions/order.actions";
+import { useToast } from "@/hooks/use-toast";
 
 interface Props {
   order: Order;
+  paypalClientId: string;
 }
 
-const OrderDetailsTable = ({ order }: Props) => {
+const OrderDetailsTable = ({ order, paypalClientId }: Props) => {
   const {
     shippingAddress,
     orderItems,
@@ -33,6 +44,41 @@ const OrderDetailsTable = ({ order }: Props) => {
     isDelivered,
     user: { name },
   } = order;
+
+  const { toast } = useToast();
+
+  const PrintLoadingState = () => {
+    const [{ isPending, isRejected }] = usePayPalScriptReducer();
+
+    let status = "";
+    if (isPending) {
+      status = "Loading PayPal...";
+    } else if (isRejected) {
+      status = "Failed to load PayPal";
+    }
+    return status;
+  };
+
+  const handleCreatePaypalOrder = async () => {
+    const res = await createPaypalOrder(order.id);
+    if (!res.success) {
+      toast({
+        variant: "destructive",
+        description: res.message,
+      });
+    }
+
+    return res.data;
+  };
+
+  const handleApprovePaypalorder = async (data: { orderID: string }) => {
+    const res = await approvePaypalOrder(order.id, { orderId: data.orderID });
+
+    toast({
+      variant: res.success ? "default" : "destructive",
+      description: res.message,
+    });
+  };
 
   return (
     <>
@@ -139,6 +185,18 @@ const OrderDetailsTable = ({ order }: Props) => {
                 </p>
               </div>
             </CardContent>
+            {/* paypal payment */}
+            {!isPaid && paymentMethod === "Paypal" && (
+              <div className="p-7">
+                <PayPalScriptProvider options={{ clientId: paypalClientId }}>
+                  <PrintLoadingState />
+                  <PayPalButtons
+                    createOrder={handleCreatePaypalOrder}
+                    onApprove={handleApprovePaypalorder}
+                  />
+                </PayPalScriptProvider>
+              </div>
+            )}
           </Card>
         </div>
       </div>
@@ -166,7 +224,10 @@ function OrderIdExpandable({ id }: { id: string }) {
 
   return (
     <div className="flex items-center gap-2">
-      <button onClick={() => setIsExpanded(!isExpanded)} className="text-green-800 font-bold">
+      <button
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="text-green-800 font-bold"
+      >
         Order Id :- {isExpanded ? "" : "..."}
         {show}
       </button>
