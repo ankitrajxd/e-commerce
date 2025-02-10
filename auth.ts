@@ -80,6 +80,11 @@ export const config = {
         }
       }
 
+      // if there is an update, set the user name
+      if (session?.user.name && trigger === "update") {
+        token = session.user.name;
+      }
+
       return token;
     },
     async session({ session, user, trigger, token }: any) {

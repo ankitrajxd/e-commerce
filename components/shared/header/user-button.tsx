@@ -30,7 +30,7 @@ const UserButton = async () => {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <div className="flex item-center">
-            <button className="p-2 relative size-8 rounded-full flex items-center justify-center bg-gray-200 hover:bg-gray-800 hover:text-white">
+            <button className="p-2 relative size-8 rounded-full flex items-center dark:bg-black justify-center border-2 hover:bg-gray-900 hover:text-white">
               {firstInitial}
             </button>
           </div>
@@ -49,7 +49,7 @@ const UserButton = async () => {
           </DropdownMenuLabel>
 
           <DropdownMenuItem>
-            <Link href={"/profile"} className="w-full">
+            <Link href={"/user/profile"} className="w-full">
               User Profile
             </Link>
           </DropdownMenuItem>

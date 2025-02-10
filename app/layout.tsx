@@ -13,7 +13,7 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: {
-    template: `%s | Prostore`,
+    template: `%s | Ecommerce`,
     default: APP_NAME!,
   },
   description: `${APP_DESCRIPTION}`,

@@ -13,7 +13,7 @@ function layout({ children }: layoutProps) {
       <div className="border-b container mx-auto">
         <div className="flex item-center h-16 px-4">
           <Link href={"/"} className="flex items-center">
-            <Image src={"/logo.svg"} height={48} width={48} alt="app_name" />
+            <Image src={"/logo.svg"} height={35} width={35} alt="app_name" />
           </Link>
 
           {/* main nav */}
