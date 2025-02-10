@@ -91,7 +91,7 @@ const ProductDetailPage = async ({ params }: Props) => {
                 )}
 
                 {/* TODO:  Buy now button */}
-                {
+                {product.stock > 0 && (
                   <BuyNowButton
                     cartItem={{
                       productId: product.id,
@@ -102,7 +102,7 @@ const ProductDetailPage = async ({ params }: Props) => {
                       qty: 1, // by default
                     }}
                   />
-                }
+                )}
               </div>
             </CardContent>
           </Card>
