@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import OrderDetailsTable from "./order-details-table";
 import { notFound } from "next/navigation";
 import { OrderItem, ShippingAddress } from "@/types";
+import { auth } from "@/auth";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -16,6 +17,8 @@ const OrderDetailsPage = async ({ params }: Props) => {
     return notFound();
   }
 
+  const session = await auth();
+
   return (
     <div>
       <OrderDetailsTable
@@ -25,6 +28,7 @@ const OrderDetailsPage = async ({ params }: Props) => {
           orderItems: order.OrderItems as OrderItem[],
         }}
         paypalClientId={process.env.PAYPAL_CLIENT_ID || "sb"}
+        isAdmin={session?.user.role === "admin" || false}
       />
     </div>
   );

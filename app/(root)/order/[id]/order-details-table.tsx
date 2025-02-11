@@ -1,6 +1,7 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -10,28 +11,31 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useToast } from "@/hooks/use-toast";
+import {
+  approvePaypalOrder,
+  createPaypalOrder,
+  deliverOrder,
+  updateOrderToPaidCOD,
+} from "@/lib/actions/order.actions";
 import { formatCurrency } from "@/lib/utils";
 import { Order } from "@/types";
-import Image from "next/image";
-import Link from "next/link";
-import { useState } from "react";
 import {
   PayPalButtons,
   PayPalScriptProvider,
   usePayPalScriptReducer,
 } from "@paypal/react-paypal-js";
-import {
-  approvePaypalOrder,
-  createPaypalOrder,
-} from "@/lib/actions/order.actions";
-import { useToast } from "@/hooks/use-toast";
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
 
 interface Props {
   order: Order;
   paypalClientId: string;
+  isAdmin: boolean;
 }
 
-const OrderDetailsTable = ({ order, paypalClientId }: Props) => {
+const OrderDetailsTable = ({ order, paypalClientId, isAdmin }: Props) => {
   const {
     shippingAddress,
     orderItems,
@@ -197,6 +201,42 @@ const OrderDetailsTable = ({ order, paypalClientId }: Props) => {
                 </PayPalScriptProvider>
               </div>
             )}
+
+            {/* cash on delivery */}
+
+            <div className="flex gap-2 p-4">
+              {!isPaid &&
+                paymentMethod.toLowerCase() === "cashondelivery" &&
+                isAdmin && (
+                  <Button
+                    className="w-full py-2 text-white bg-green-500 hover:bg-green-600"
+                    onClick={async () => {
+                      const res = await updateOrderToPaidCOD(order.id);
+                      toast({
+                        variant: res.success ? "default" : "destructive",
+                        description: res.message,
+                      });
+                    }}
+                  >
+                    Mark as Paid
+                  </Button>
+                )}
+              {/* mark as delivered */}
+              {!isDelivered && isPaid && isAdmin && (
+                <Button
+                  className="w-full py-2 text-white bg-green-500 hover:bg-green-600"
+                  onClick={async () => {
+                    const res = await deliverOrder(order.id);
+                    toast({
+                      variant: res.success ? "default" : "destructive",
+                      description: res.message,
+                    });
+                  }}
+                >
+                  Mark as Delivered
+                </Button>
+              )}
+            </div>
           </Card>
         </div>
       </div>
