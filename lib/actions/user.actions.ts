@@ -60,6 +60,20 @@ export async function signUpWithCredentials(
       confirmPassword: formdata.get("confirmPassword"),
     });
 
+    // find if the user already exists
+    const existingUser = await prisma.user.findFirst({
+      where: {
+        email: user.email,
+      },
+    });
+
+    if (existingUser) {
+      return {
+        success: false,
+        message: "User already exists",
+      };
+    }
+
     const hashedPassword = hashSync(user.password, 10);
     await prisma.user.create({
       data: {
@@ -82,7 +96,10 @@ export async function signUpWithCredentials(
     if (isRedirectError(error)) {
       throw error;
     }
-    return sendResponse(false, formatError(error));
+    return {
+      success: false,
+      message: formatError(error),
+    };
   }
 }
 
@@ -126,9 +143,15 @@ export async function updateUserAddress(data: ShippingAddress) {
       },
     });
 
-    return sendResponse(true, "Address updated successfully");
+    return {
+      success: true,
+      message: "Address updated successfully",
+    };
   } catch (error) {
-    return sendResponse(false, formatError(error));
+    return {
+      success: false,
+      message: formatError(error),
+    };
   }
 }
 
