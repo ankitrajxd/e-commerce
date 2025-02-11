@@ -393,3 +393,64 @@ export async function getOrderSummary() {
     latestSales,
   };
 }
+
+// get all orders
+export async function getAllOrders({
+  limit = PAGE_SIZE,
+  page,
+}: {
+  limit?: number;
+  page: number;
+}) {
+  const data = await prisma.order.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+    take: limit,
+    skip: (page - 1) * limit,
+    include: {
+      user: {
+        select: {
+          name: true,
+          email: true,
+        },
+      },
+    },
+  });
+
+  const dataCount = await prisma.order.count();
+
+  return {
+    data,
+    totalPages: Math.ceil(dataCount / limit),
+  };
+}
+
+// delete order by id
+
+export async function deleteOrder(id: string) {
+  try {
+    const session = await auth();
+    if (session?.user?.role !== "admin") {
+      throw new Error("User is not authorized");
+    }
+
+    await prisma.order.delete({
+      where: {
+        id,
+      },
+    });
+
+    revalidatePath("/admin/orders");
+
+    return {
+      success: true,
+      message: "Order deleted successfully",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: formatError(error),
+    };
+  }
+}
