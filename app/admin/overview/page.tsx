@@ -18,14 +18,16 @@ import { Charts } from "./charts";
 const AdminOverviewPage = async () => {
   const session = await auth();
   if (session?.user.role !== "admin") {
-    return <div>Not authorized </div>;
+    return (
+      <div className="grid place-content-center h-screen">Not Authorized</div>
+    );
   }
 
   const summary = await getOrderSummary();
 
   console.log(summary.totalSales._sum.totalPrice);
 
-  return (
+  return session.user.role === "admin" ? (
     <div className="space-y-2">
       <h1 className="h1-bold my-4 text-gray-800">Dashboard</h1>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -77,12 +79,12 @@ const AdminOverviewPage = async () => {
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
         {/* <Card className="col-span-4">
-          <CardHeader>
-            <CardTitle>Overview</CardTitle>
-          </CardHeader>
-          <CardContent>
-          </CardContent>
-        </Card> */}
+      <CardHeader>
+        <CardTitle>Overview</CardTitle>
+      </CardHeader>
+      <CardContent>
+      </CardContent>
+    </Card> */}
         <div className="col-span-4">
           <Charts data={summary.salesData} />{" "}
         </div>
@@ -127,7 +129,7 @@ const AdminOverviewPage = async () => {
         </Card>
       </div>
     </div>
-  );
+  ) : null;
 };
 
 export default AdminOverviewPage;
