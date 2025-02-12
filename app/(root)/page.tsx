@@ -5,7 +5,6 @@ import React from "react";
 
 const HomePage = async () => {
   const latestProduct = await getLatestProducts();
-
   return (
     <div>
       <ProductList data={latestProduct} title="Latest Products" />
