@@ -9,7 +9,7 @@ export async function getLatestProducts() {
   const data = await prisma.product.findMany({
     take: LATEST_PRODUCTS_LIMIT,
     orderBy: {
-      createdAt: "desc",
+      stock: "desc",
     },
   });
 
@@ -24,5 +24,12 @@ export async function getProductBySlug(slug: string) {
     },
   });
 
+  return convertToPlainObject(data);
+}
+
+// get all products
+
+export async function getAllProducts() {
+  const data = await prisma.product.findMany();
   return convertToPlainObject(data);
 }

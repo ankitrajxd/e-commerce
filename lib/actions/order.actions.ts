@@ -12,6 +12,8 @@ import { paypal } from "../paypal";
 import { revalidatePath } from "next/cache";
 import { PAGE_SIZE } from "../constants";
 import { Prisma } from "@prisma/client";
+import Razorpay from "razorpay";
+import crypto from "crypto";
 
 // create order and create the order items
 export const createOrder = async () => {
@@ -512,6 +514,134 @@ export async function deliverOrder(orderId: string) {
     return {
       success: true,
       mesage: "Order has been marked delivered",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: formatError(error),
+    };
+  }
+}
+
+// create razorpay order
+export async function createRazorpayOrder(orderId: string) {
+  try {
+    // get the order from the db
+    const order = await prisma.order.findFirst({
+      where: {
+        id: orderId,
+      },
+    });
+
+    if (!order) {
+      throw new Error("Order not found");
+    }
+
+    // convvert the total price to paisa
+    const amountInPaise = Math.round(Number(order.totalPrice) * 100);
+
+    // initialize razorpay with secret keys
+    const key_id = process.env.NEXT_PUBLIC_KEY_ID;
+    const key_secret = process.env.RZR_KEY_SECRET;
+
+    if (!key_id || !key_secret) {
+      throw new Error("Razorpay keys not found");
+    }
+
+    const razorpay = new Razorpay({
+      key_id,
+      key_secret,
+    });
+
+    // create order
+    const options = {
+      amount: amountInPaise,
+      currency: "INR",
+      receipt: orderId,
+    };
+
+    const razorpayOrder = await razorpay.orders.create(options);
+
+    // update order with razorpay order id
+    await prisma.order.update({
+      where: {
+        id: orderId,
+      },
+      data: {
+        paymentResult: {
+          id: razorpayOrder.id,
+          email_address: "",
+          status: "Not Paid",
+          pricePaid: "",
+        },
+      },
+    });
+
+    console.log(`path to revalidate -  /order/${order.id}`);
+    
+
+    revalidatePath(`/order/${order.id}`);
+    return {
+      success: true,
+      message: "Razorpay order created successfully",
+      data: razorpayOrder.id,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: formatError(error),
+    };
+  }
+}
+
+// verify rzrpay signature
+export async function checkRazorpayPayment(
+  orderId: string,
+  paymentData: {
+    razorpay_order_id: string;
+    razorpay_payment_id: string;
+    razorpay_signature: string;
+  }
+) {
+  try {
+    const order = await prisma.order.findFirst({
+      where: { id: orderId },
+    });
+    if (!order) {
+      throw new Error("Order not found");
+    }
+
+    const secret = process.env.RZR_KEY_SECRET;
+    if (!secret) {
+      throw new Error("Razorpay secret is missing");
+    }
+
+    const generatedSignature = crypto
+      .createHmac("sha256", secret)
+      .update(
+        `${paymentData.razorpay_order_id}|${paymentData.razorpay_payment_id}`
+      )
+      .digest("hex");
+
+    if (generatedSignature !== paymentData.razorpay_signature) {
+      throw new Error("Invalid signature");
+    }
+
+    // update order to paid
+    updateOrderToPaid({
+      orderId,
+      paymentResult: {
+        id: paymentData.razorpay_payment_id,
+        status: "paid",
+        email_address: "",
+        pricePaid: order.totalPrice,
+      },
+    });
+
+
+    return {
+      success: true,
+      message: "Order paid successfully",
     };
   } catch (error) {
     return {

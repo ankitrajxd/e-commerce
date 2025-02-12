@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { Badge } from "@/components/ui/badge";
@@ -13,29 +14,38 @@ import {
 } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
 import {
-  approvePaypalOrder,
-  createPaypalOrder,
+  checkRazorpayPayment,
+  // approvePaypalOrder,
+  // createPaypalOrder,
+  createRazorpayOrder,
   deliverOrder,
   updateOrderToPaidCOD,
 } from "@/lib/actions/order.actions";
 import { formatCurrency } from "@/lib/utils";
 import { Order } from "@/types";
-import {
-  PayPalButtons,
-  PayPalScriptProvider,
-  usePayPalScriptReducer,
-} from "@paypal/react-paypal-js";
+// import {
+//   PayPalButtons,
+//   PayPalScriptProvider,
+//   usePayPalScriptReducer,
+// } from "@paypal/react-paypal-js";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import Script from "next/script";
+import { useRouter } from "nextjs-toploader/app";
+import { useState, useTransition } from "react";
 
 interface Props {
   order: Order;
   paypalClientId: string;
   isAdmin: boolean;
+  razorypayClientId: string;
 }
 
-const OrderDetailsTable = ({ order, paypalClientId, isAdmin }: Props) => {
+const OrderDetailsTable = ({ order, isAdmin, razorypayClientId }: Props) => {
+  const [isPending, startTransition] = useTransition();
+
+  const router = useRouter();
+
   const {
     shippingAddress,
     orderItems,
@@ -51,38 +61,106 @@ const OrderDetailsTable = ({ order, paypalClientId, isAdmin }: Props) => {
 
   const { toast } = useToast();
 
-  const PrintLoadingState = () => {
-    const [{ isPending, isRejected }] = usePayPalScriptReducer();
+  // const PrintLoadingState = () => {
+  //   const [{ isPending, isRejected }] = usePayPalScriptReducer();
 
-    let status = "";
-    if (isPending) {
-      status = "Loading PayPal...";
-    } else if (isRejected) {
-      status = "Failed to load PayPal";
-    }
-    return status;
-  };
+  //   let status = "";
+  //   if (isPending) {
+  //     status = "Loading PayPal...";
+  //   } else if (isRejected) {
+  //     status = "Failed to load PayPal";
+  //   }
+  //   return status;
+  // };
 
-  const handleCreatePaypalOrder = async () => {
-    const res = await createPaypalOrder(order.id);
-    if (!res.success) {
-      toast({
-        variant: "destructive",
-        description: res.message,
+  // const handleCreatePaypalOrder = async () => {
+  //   const res = await createPaypalOrder(order.id);
+  //   if (!res.success) {
+  //     toast({
+  //       variant: "destructive",
+  //       description: res.message,
+  //     });
+  //   }
+
+  //   return res.data;
+  // };
+
+  // const handleApprovePaypalorder = async (data: { orderID: string }) => {
+  //   const res = await approvePaypalOrder(order.id, { orderId: data.orderID });
+
+  //   toast({
+  //     variant: res.success ? "default" : "destructive",
+  //     description: res.message,
+  //   });
+  // };
+
+  async function handleRzrpayPayment() {
+    startTransition(async () => {
+      // Call the server action to create the Razorpay order.
+      const res = await createRazorpayOrder(order.id);
+      if (!res.success) {
+        toast({
+          variant: "destructive",
+          description: res.message,
+        });
+        return;
+      }
+      const razorpayOrderId = res.data;
+
+      // Set up Razorpay checkout options.
+      const options = {
+        key: razorypayClientId, // Public key from environment
+        amount: Number(totalPrice) * 100, // Amount in paise (conversion from rupees)
+        currency: "INR",
+        name: "Ecommerce",
+        description: "Payment for Order " + order.id,
+        order_id: razorpayOrderId, // Razorpay order id returned by your server action
+        handler: async (response: {
+          razorpay_order_id: string;
+          razorpay_payment_id: string;
+          razorpay_signature: string;
+        }) => {
+          // Here you can handle the successful payment.
+          // For example, you might call another server action to verify the payment signature.
+          console.log("Payment success:", response);
+
+          // verify the payment signature
+
+          const res = await checkRazorpayPayment(order.id, {
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature: response.razorpay_signature,
+          });
+
+          if (!res?.success) {
+            toast({
+              variant: "destructive",
+              description: res.message,
+            });
+          }
+
+          toast({
+            variant: res.success ? "default" : "destructive",
+            description: res.message,
+          });
+          console.log("Payment verified");
+
+          router.push(`/order/success/${order.id}`); // Redirect to success page
+        },
+        prefill: {
+          name: name,
+        },
+        theme: {
+          color: "#3399cc",
+        },
+      };
+      const rzp = new (window as any).Razorpay(options);
+      rzp.on("payment.failed", function (response: any) {
+        console.error("Payment failed:", response.error);
       });
-    }
-
-    return res.data;
-  };
-
-  const handleApprovePaypalorder = async (data: { orderID: string }) => {
-    const res = await approvePaypalOrder(order.id, { orderId: data.orderID });
-
-    toast({
-      variant: res.success ? "default" : "destructive",
-      description: res.message,
+      rzp.open();
     });
-  };
+  }
 
   return (
     <>
@@ -190,7 +268,7 @@ const OrderDetailsTable = ({ order, paypalClientId, isAdmin }: Props) => {
               </div>
             </CardContent>
             {/* paypal payment */}
-            {!isPaid && paymentMethod === "Paypal" && (
+            {/* {!isPaid && paymentMethod === "Paypal" && (
               <div className="p-7">
                 <PayPalScriptProvider options={{ clientId: paypalClientId }}>
                   <PrintLoadingState />
@@ -199,6 +277,21 @@ const OrderDetailsTable = ({ order, paypalClientId, isAdmin }: Props) => {
                     onApprove={handleApprovePaypalorder}
                   />
                 </PayPalScriptProvider>
+              </div>
+            )} */}
+
+            {/* razorpay payment */}
+            {!isPaid && (
+              <div className="grid place-content-center">
+                {/* Load Razorpay's checkout.js script */}
+                <Script src="https://checkout.razorpay.com/v1/checkout.js" />
+                <Button
+                  variant={"default"}
+                  disabled={isPending}
+                  onClick={handleRzrpayPayment}
+                >
+                  {isPending ? "Processing..." : "Pay with Razorpay"}
+                </Button>
               </div>
             )}
 
