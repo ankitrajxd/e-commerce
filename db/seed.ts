@@ -1,13 +1,13 @@
 import { prisma } from "@/db/prisma";
 import sampleData from "./sample-data";
 
-// async function main() {
-//   await prisma.product.deleteMany();
-//   await prisma.product.createMany({
-//     data: sampleData.products,
-//   });
-//   console.log("Db seeded successfully!");
-// }
+async function main() {
+  await prisma.product.deleteMany();
+  await prisma.product.createMany({
+    data: sampleData.products,
+  });
+  console.log("Db seeded successfully!");
+}
 
 // seeding users
 async function seedUsers() {
@@ -24,4 +24,5 @@ async function seedUsers() {
   console.log("Users seeded successfully!");
 }
 
+main();
 seedUsers();
