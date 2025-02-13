@@ -13,6 +13,7 @@ import { prisma } from "@/db/prisma";
 import { formatError, sendResponse } from "../utils";
 import { ShippingAddress } from "@/types";
 import { z } from "zod";
+import { hash } from "../encrypt";
 
 // sign in users with credentials
 export async function signInWithCredentials(
@@ -74,7 +75,7 @@ export async function signUpWithCredentials(
       };
     }
 
-    const hashedPassword = hashSync(user.password, 10);
+    const hashedPassword = await hash(user.password);
     await prisma.user.create({
       data: {
         name: user.name,
