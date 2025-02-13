@@ -25,8 +25,6 @@ const AdminOverviewPage = async () => {
 
   const summary = await getOrderSummary();
 
-  console.log(summary.totalSales._sum.totalPrice);
-
   return session.user.role === "admin" ? (
     <div className="space-y-2">
       <h1 className="h1-bold my-4 text-gray-800">Dashboard</h1>

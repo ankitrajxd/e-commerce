@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import NextAuth, { NextAuthConfig } from "next-auth";
@@ -7,6 +6,7 @@ import { prisma } from "./db/prisma";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { compareSync } from "bcrypt-ts-edge";
 import { NextResponse } from "next/server";
+import Google from "next-auth/providers/google";
 
 export const config = {
   pages: {
@@ -19,7 +19,7 @@ export const config = {
   session: {
     strategy: "jwt",
   },
-  adapter: PrismaAdapter({ prisma }),
+  adapter: PrismaAdapter(prisma),
   providers: [
     CredentialsProvider({
       credentials: {
@@ -60,6 +60,9 @@ export const config = {
         return null;
       },
     }),
+    Google({
+      allowDangerousEmailAccountLinking: true,
+    }),
   ],
 
   callbacks: {
@@ -92,8 +95,6 @@ export const config = {
       session.user.id = token.sub;
       session.user.role = token.role;
       session.user.name = token.name;
-
-      // console.log(session);
 
       // if there is an update, set the user name
       if (trigger === "update") {

@@ -42,7 +42,6 @@ const PaymentMethodForm = ({ preferredPaymentMethod }: Props) => {
     startTransition(async () => {
       const res = await updateUserPaymentMethod(values);
       if (!res.success) {
-        console.log(res.message);
 
         toast({
           variant: "destructive",

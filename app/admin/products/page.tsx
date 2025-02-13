@@ -9,8 +9,6 @@ const AdminProductsPage = async ({ searchParams }: Props) => {
   const searchText = params.query || "";
   const category = params.catagory || "";
 
-  console.log(page, searchText, category);
-
   return (
     <div className="space-y-2">
       <div className="flex-between">

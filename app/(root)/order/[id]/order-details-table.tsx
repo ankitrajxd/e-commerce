@@ -122,8 +122,6 @@ const OrderDetailsTable = ({ order, isAdmin, razorypayClientId }: Props) => {
         }) => {
           // Here you can handle the successful payment.
           // For example, you might call another server action to verify the payment signature.
-          console.log("Payment success:", response);
-
           // verify the payment signature
 
           const res = await checkRazorpayPayment(order.id, {
@@ -143,7 +141,6 @@ const OrderDetailsTable = ({ order, isAdmin, razorypayClientId }: Props) => {
             variant: res.success ? "default" : "destructive",
             description: res.message,
           });
-          console.log("Payment verified");
 
           router.push(`/order/success/${order.id}`); // Redirect to success page
         },
@@ -281,7 +278,7 @@ const OrderDetailsTable = ({ order, isAdmin, razorypayClientId }: Props) => {
             )} */}
 
             {/* razorpay payment */}
-            {!isPaid && (
+            {!isPaid && paymentMethod.toLowerCase() === "online" && (
               <div className="grid place-content-center">
                 {/* Load Razorpay's checkout.js script */}
                 <Script src="https://checkout.razorpay.com/v1/checkout.js" />
