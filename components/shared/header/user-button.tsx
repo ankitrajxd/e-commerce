@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { signOutUser } from "@/lib/actions/user.actions";
 import { UserIcon } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 const UserButton = async () => {
@@ -30,9 +31,19 @@ const UserButton = async () => {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <div className="flex item-center">
-            <button className="p-2 relative size-8 rounded-full flex items-center dark:bg-black justify-center border-2 hover:bg-gray-900 hover:text-white">
-              {firstInitial}
-            </button>
+            {session.user.image ? (
+              <Image
+                src={session.user.image}
+                alt="user-pfp"
+                width={32}
+                height={32}
+                className="rounded-full"
+              />
+            ) : (
+              <button className="p-2 relative size-8 rounded-full flex items-center dark:bg-black justify-center border-2 hover:bg-gray-900 hover:text-white">
+                {firstInitial}
+              </button>
+            )}
           </div>
         </DropdownMenuTrigger>
 
