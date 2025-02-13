@@ -21,7 +21,7 @@ import {
   deliverOrder,
   updateOrderToPaidCOD,
 } from "@/lib/actions/order.actions";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, formatDateTime } from "@/lib/utils";
 import { Order } from "@/types";
 // import {
 //   PayPalButtons,
@@ -56,6 +56,8 @@ const OrderDetailsTable = ({ order, isAdmin, razorypayClientId }: Props) => {
     paymentMethod,
     isPaid,
     isDelivered,
+    paidAt,
+    deliveredAt,
     user: { name },
   } = order;
 
@@ -173,10 +175,12 @@ const OrderDetailsTable = ({ order, isAdmin, razorypayClientId }: Props) => {
             <CardContent className="flex flex-col gap-2 text-sm">
               {paymentMethod}
               <Badge
-                className="w-fit"
-                variant={isPaid ? "default" : "destructive"}
+                className="w-fit bg-green-700"
+                variant={isPaid ? "secondary" : "destructive"}
               >
-                {isPaid ? "Paid" : "Not Paid"}
+                {isPaid
+                  ? `Paid at ${formatDateTime(paidAt as Date).dateTime}`
+                  : "Not Paid"}
               </Badge>
             </CardContent>
           </Card>
@@ -194,7 +198,11 @@ const OrderDetailsTable = ({ order, isAdmin, razorypayClientId }: Props) => {
                 className="w-fit"
                 variant={isDelivered ? "default" : "destructive"}
               >
-                {isDelivered ? "Shipped" : "Not Delivered"}
+                {isDelivered
+                  ? `Delivered at ${
+                      formatDateTime(deliveredAt as Date).dateTime
+                    }`
+                  : "Not Delivered"}
               </Badge>
             </CardContent>
           </Card>
