@@ -14,8 +14,8 @@ export const signInDefaultValues = {
 export const signUpDefaultValues = {
   name: "Ankit",
   email: "ankit@gmail.com",
-  password: "12345",
-  confirmPassword: "12345",
+  password: "123456",
+  confirmPassword: "123456",
 };
 
 export const shippingAddressDefaultValues: ShippingAddress = {

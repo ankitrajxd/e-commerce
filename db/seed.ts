@@ -12,30 +12,30 @@ async function main() {
 
 // seeding users
 async function seedUsers() {
-  await prisma.account.deleteMany();
-  await prisma.session.deleteMany();
-  await prisma.verificationToken.deleteMany();
-  await prisma.session.deleteMany();
-  await prisma.user.deleteMany();
+  try {
+    // Delete existing records
+    await prisma.account.deleteMany();
+    await prisma.session.deleteMany();
+    await prisma.verificationToken.deleteMany();
+    await prisma.user.deleteMany();
 
-  // await prisma.user.createMany({
-  //   data: sampleData.users,
-  // });
+    const users = [];
+    for (let i = 0; i < sampleData.users.length; i++) {
+      // Hash the user's password once and store it in a variable
+      const hashedPassword = await hash(sampleData.users[i].password);
+      users.push({
+        ...sampleData.users[i],
+        password: hashedPassword,
+      });
+      console.log(sampleData.users[i].password, hashedPassword);
+    }
 
-  const users = [];
-  for (let i = 0; i < sampleData.users.length; i++) {
-    users.push({
-      ...sampleData.users[i],
-      password: await hash(sampleData.users[i].password),
-    });
-    console.log(
-      sampleData.users[i].password,
-      await hash(sampleData.users[i].password)
-    );
+    // Insert the seeded users into the database
+    await prisma.user.createMany({ data: users });
+    console.log("Users seeded successfully!");
+  } catch (error) {
+    console.error("Error seeding users:", error);
   }
-  await prisma.user.createMany({ data: users });
-
-  console.log("Users seeded successfully!");
 }
 
 main();
