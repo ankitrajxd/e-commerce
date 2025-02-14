@@ -30,7 +30,6 @@ const AdminProductsPage = async ({ searchParams }: Props) => {
     category,
   });
 
-
   return (
     <div className="space-y-2">
       <div className="flex-between">
@@ -76,7 +75,7 @@ const AdminProductsPage = async ({ searchParams }: Props) => {
         </TableBody>
       </Table>
 
-      {products.totalPages && products.totalPages > 1 && (
+      {products.totalPages > 1 && (
         <Pagination page={page} totalPages={products.totalPages} />
       )}
     </div>

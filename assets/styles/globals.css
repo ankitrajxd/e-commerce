@@ -124,3 +124,12 @@ body {
     --chart-5: 340 75% 55%;
   }
 }
+
+
+/* uploadthingbutton text override   */
+html.dark .upload-field .text-white{
+  color: #ffffff !important;
+}
+html.light .upload-field .text-white{
+  color: #000 !important;
+}

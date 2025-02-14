@@ -8,7 +8,7 @@ import { signInDefaultValues } from "@/lib/constants";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useActionState } from "react";
+import { useActionState, useTransition } from "react";
 import { signIn } from "next-auth/react";
 import { FaGoogle } from "react-icons/fa";
 
@@ -17,6 +17,8 @@ const CredentialsSignInForm = () => {
     success: false,
     message: "",
   });
+
+  const [isPending, startTransition] = useTransition();
 
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/";
@@ -77,13 +79,16 @@ const CredentialsSignInForm = () => {
       </form>
       <div>
         <Button
+          disabled={isPending}
           onClick={async () => {
-            signIn("google");
+            startTransition(async () => {
+              signIn("google");
+            });
           }}
           variant={"default"}
           className="w-fit mt-3 flex gap-2"
         >
-          <FaGoogle />
+          {isPending ? <Loader2 /> : <FaGoogle />}
           Sign In Google
         </Button>
       </div>
