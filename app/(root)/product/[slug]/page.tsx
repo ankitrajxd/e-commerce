@@ -1,11 +1,14 @@
+import { auth } from "@/auth";
 import AddToCart from "@/components/shared/product/add-to-cart";
 import BuyNowButton from "@/components/shared/product/buy-now";
 import ProductImages from "@/components/shared/product/product-images";
 import ProductPrice from "@/components/shared/product/product-price";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { getMyCart } from "@/lib/actions/cart.actions";
 import { getProductBySlug } from "@/lib/actions/product.actions";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 interface Props {
@@ -14,6 +17,8 @@ interface Props {
 
 const ProductDetailPage = async ({ params }: Props) => {
   const { slug } = await params;
+
+  const session = await auth();
 
   const product = await getProductBySlug(slug);
   if (!product) {
@@ -90,7 +95,7 @@ const ProductDetailPage = async ({ params }: Props) => {
                   </div>
                 )}
 
-                {/* TODO:  Buy now button */}
+                {/*  Buy now button */}
                 {product.stock > 0 && (
                   <BuyNowButton
                     cartItem={{
@@ -102,6 +107,17 @@ const ProductDetailPage = async ({ params }: Props) => {
                       qty: 1, // by default
                     }}
                   />
+                )}
+
+                {/* edit the product of admin only */}
+
+                {session?.user.role === "admin" && (
+                  <Link className="" href={`/admin/products/${product.id}`}>
+                    <Button className="mt-2" variant={"outline"} size={"sm"}>
+                      Edit (admin only)
+                    </Button>
+                  </Link>
+                  
                 )}
               </div>
             </CardContent>
