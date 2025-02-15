@@ -25,4 +25,4 @@ async function seedUsers() {
 }
 
 main();
-// seedUsers();
+seedUsers();

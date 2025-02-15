@@ -6,6 +6,7 @@ import {
   shippingAddressSchema,
   signInFormSchema,
   signUpFormSchema,
+  userUpdateSchema,
 } from "../validators";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { hashSync } from "bcrypt-ts-edge";
@@ -13,6 +14,8 @@ import { prisma } from "@/db/prisma";
 import { formatError, sendResponse } from "../utils";
 import { ShippingAddress } from "@/types";
 import { z } from "zod";
+import { PAGE_SIZE } from "../constants";
+import { revalidatePath } from "next/cache";
 
 // sign in users with credentials
 export async function signInWithCredentials(
@@ -221,6 +224,104 @@ export async function updateProfile(user: { name: string; email: string }) {
     return {
       success: true,
       message: "Profile updated successfully",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: formatError(error),
+    };
+  }
+}
+
+// get alll users
+export async function getAllUsers({
+  limit = PAGE_SIZE,
+  page,
+}: {
+  limit?: number;
+  page: number;
+}) {
+  const users = await prisma.user.findMany({
+    take: limit,
+    skip: (page - 1) * limit,
+    orderBy: {
+      createdAt: "desc",
+    },
+
+    omit: {
+      password: true,
+    },
+  });
+
+  const dataCount = await prisma.user.count();
+
+  return {
+    data: users,
+    totalPage: Math.ceil(dataCount / limit),
+  };
+}
+
+// delete a user by id
+export async function deleteUserById(userId: string) {
+  try {
+    await prisma.user.delete({
+      where: {
+        id: userId,
+      },
+    });
+
+    revalidatePath("/admin/users");
+
+    return {
+      success: true,
+      message: "User deleted successfully",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: formatError(error),
+    };
+  }
+}
+
+// update a user
+export async function updateUser(user: z.infer<typeof userUpdateSchema>) {
+  try {
+    //  validate the user
+    const updatedUser = userUpdateSchema.parse(user);
+
+    if (!updatedUser) {
+      throw new Error("Invalid user data");
+    }
+
+    // find the user
+    const existingUser = await prisma.user.findFirst({
+      where: {
+        id: user.id,
+      },
+    });
+
+    if (!existingUser) {
+      throw new Error("User not found");
+    }
+
+    // update
+
+    await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        name: updatedUser.name,
+        role: updatedUser.role,
+      },
+    });
+
+    revalidatePath("/admin/users");
+
+    return {
+      success: true,
+      message: "User updated successfully",
     };
   } catch (error) {
     return {
