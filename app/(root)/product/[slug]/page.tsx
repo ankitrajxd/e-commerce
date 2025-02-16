@@ -17,9 +17,7 @@ interface Props {
 
 const ProductDetailPage = async ({ params }: Props) => {
   const { slug } = await params;
-
   const session = await auth();
-
   const product = await getProductBySlug(slug);
   if (!product) {
     return notFound();
@@ -31,7 +29,7 @@ const ProductDetailPage = async ({ params }: Props) => {
     <section>
       <div className="grid grid-cols-1 md:grid-cols-5">
         {/* Images column */}
-        <div className="col-span-2">
+        <div className="col-span-2 rounded-md overflow-hidden">
           <ProductImages images={product.images} />
         </div>
 

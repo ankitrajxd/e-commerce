@@ -13,7 +13,7 @@ const ProductImages = ({ images }: { images: string[] }) => {
         alt="product image"
         width={1000}
         height={1000}
-        className="min-h-[300px] object-cover object-center "
+        className="min-h-[300px] object-cover object-center rounded-md"
       />
 
       <div className="flex p-2 items-center gap-3">
@@ -22,11 +22,16 @@ const ProductImages = ({ images }: { images: string[] }) => {
             key={index}
             onClick={() => setSelectedImage(index)}
             className={cn(
-              "cursor-pointer hover:border border-gray-500",
-              selectedImage === index && "border border-gray-500"
+              "cursor-pointer hover:border border-orange-500 rounded-sm overflow-hidden",
+              selectedImage === index && "border border-orange-500"
             )}
           >
-            <Image src={image} alt="product image" width={100} height={100} />
+            <Image
+              src={image}
+              alt="product image rounded-sm"
+              width={100}
+              height={100}
+            />
           </div>
         ))}
       </div>

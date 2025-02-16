@@ -8,6 +8,8 @@ interface Props {
   }>;
 }
 
+//  nextauth provides the callbackUrl as a query parameter.
+
 const SignInPage = async ({ searchParams }: Props) => {
   const session = await auth();
   const { callbackUrl } = await searchParams;

@@ -179,3 +179,30 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
     };
   }
 }
+
+// get all categories
+export async function getAllCategories() {
+  const data = await prisma.product.groupBy({
+    by: ["category"],
+    _count: {
+      category: true,
+    },
+  });
+
+  return data;
+}
+
+// get featured produts
+export async function getFeaturedProducts() {
+  const data = await prisma.product.findMany({
+    where: {
+      isFeatured: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+    take: 4,
+  });
+
+  return convertToPlainObject(data);
+}
