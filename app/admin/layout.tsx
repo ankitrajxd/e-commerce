@@ -2,7 +2,6 @@ import Menu from "@/components/shared/header/menu";
 import Image from "next/image";
 import Link from "next/link";
 import MainNav from "./main-nav";
-import { Input } from "@/components/ui/input";
 import { auth } from "@/auth";
 import AdminSearch from "@/components/admin/admin-search";
 

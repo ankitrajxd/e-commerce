@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Menu from "./menu";
 import CategoryDrawer from "../category-drawer";
+import Search from "./search";
 
 const Header = () => {
   return (
@@ -21,6 +22,9 @@ const Header = () => {
             />
             <span className="font-semibold ml-3">{APP_NAME}</span>
           </Link>
+        </div>
+        <div className="hidden md:block">
+          <Search />
         </div>
         <div>
           <Menu />
