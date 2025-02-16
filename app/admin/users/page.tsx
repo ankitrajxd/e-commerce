@@ -15,19 +15,23 @@ import { Metadata } from "next";
 import Link from "next/link";
 
 interface Props {
-  searchParams: Promise<{ page: string }>;
+  searchParams: Promise<{ page: string; query: string }>;
 }
 
 const AdminUserPage = async ({ searchParams }: Props) => {
-  const { page = "1" } = await searchParams;
+  const { page = "1", query: searchText } = await searchParams;
 
-  const users = await getAllUsers({ page: Number(page) });
-
-  //   console.log(users);
+  const users = await getAllUsers({ page: Number(page), query: searchText });
 
   return (
     <div className="space-y-2">
       <h2 className="h2-bold ">Users</h2>
+      {searchText && (
+        <p className="text-sm">
+          Showing results for <strong>{searchText}</strong>
+        </p>
+      )}
+
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>

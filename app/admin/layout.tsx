@@ -4,6 +4,7 @@ import Link from "next/link";
 import MainNav from "./main-nav";
 import { Input } from "@/components/ui/input";
 import { auth } from "@/auth";
+import AdminSearch from "@/components/admin/admin-search";
 
 interface layoutProps {
   children: React.ReactNode;
@@ -24,13 +25,7 @@ async function layout({ children }: layoutProps) {
             {/* main nav */}
             {session?.user.role === "admin" && <MainNav className="mx-6" />}
             <div className="ml-auto items-center flex space-x-4">
-              <div>
-                <Input
-                  type="search"
-                  placeholder="Search..."
-                  className="md:w-[100px] lg:w-[300px]"
-                />
-              </div>
+              <AdminSearch />
               <Menu />
             </div>
           </div>

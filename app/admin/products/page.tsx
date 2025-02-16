@@ -34,6 +34,11 @@ const AdminProductsPage = async ({ searchParams }: Props) => {
     <div className="space-y-2">
       <div className="flex-between">
         <h1 className="h2-bold">Products</h1>
+        {searchText && (
+          <p className="text-sm">
+            Showing results for <strong>{searchText}</strong>
+          </p>
+        )}
         <Button asChild variant={"default"}>
           <Link href={"/admin/products/create"}>Create Product</Link>
         </Button>

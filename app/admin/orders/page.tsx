@@ -20,22 +20,30 @@ export const metadata: Metadata = {
 };
 
 interface Props {
-  searchParams: Promise<{ page: string }>;
+  searchParams: Promise<{ page: string; query: string }>;
 }
 
 const AdminOrdersPage = async ({ searchParams }: Props) => {
-  const { page = 1 } = await searchParams;
+  const { page = 1, query: searchText } = await searchParams;
   const session = await auth();
 
   if (session?.user.role !== "admin") {
     throw new Error("Unauthorized");
   }
 
-  const orders = await getAllOrders({ page: Number(page) });
+  const orders = await getAllOrders({
+    page: Number(page),
+    query: searchText || "",
+  });
 
   return (
     <div className="space-y-2">
       <h2 className="h2-bold ">Orders</h2>
+      {searchText && (
+        <p className="text-sm">
+          Showing results for <strong>{searchText}</strong>
+        </p>
+      )}
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>
@@ -73,7 +81,7 @@ const AdminOrdersPage = async ({ searchParams }: Props) => {
                     <span className="text-red-500">Not Delivered</span>
                   )}
                 </TableCell>
-                <TableCell>{order.user.email}</TableCell>
+                <TableCell>{order.user.name}</TableCell>
 
                 <TableCell>
                   <Button size={"sm"} variant={"outline"}>

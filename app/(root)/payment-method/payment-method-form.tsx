@@ -42,7 +42,6 @@ const PaymentMethodForm = ({ preferredPaymentMethod }: Props) => {
     startTransition(async () => {
       const res = await updateUserPaymentMethod(values);
       if (!res.success) {
-
         toast({
           variant: "destructive",
           description: res.message,
@@ -66,7 +65,7 @@ const PaymentMethodForm = ({ preferredPaymentMethod }: Props) => {
             className="space-y-4"
             onSubmit={form.handleSubmit(onSubmit)}
           >
-            <div className="flex flex-col gap-5 md:flex-row">
+            <div className="flex flex-col md:flex-row gap-5">
               <FormField
                 control={form.control}
                 name="type"
@@ -75,22 +74,22 @@ const PaymentMethodForm = ({ preferredPaymentMethod }: Props) => {
                     <FormControl>
                       <RadioGroup
                         onValueChange={field.onChange}
-                        className="flex flex-col "
+                        className="flex flex-col space-y-2"
                       >
-                        {PAYMENT_METHODS.map((method) => (
+                        {PAYMENT_METHODS.map((paymentMethod) => (
                           <FormItem
-                            key={method}
-                            className="flex items-center space-y-3 "
+                            key={paymentMethod}
+                            className="flex items-center space-x-3 space-y-0"
                           >
                             <FormControl>
                               <RadioGroupItem
-                                checked={field.value === method}
-                                value={method}
-                              >
-                                {method}
-                              </RadioGroupItem>
+                                value={paymentMethod}
+                                checked={field.value === paymentMethod}
+                              />
                             </FormControl>
-                            <FormLabel className="ml-2">{method}</FormLabel>
+                            <FormLabel className="font-normal">
+                              {paymentMethod}
+                            </FormLabel>
                           </FormItem>
                         ))}
                       </RadioGroup>

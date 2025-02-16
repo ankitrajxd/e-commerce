@@ -10,7 +10,7 @@ const ProductPrice = ({ value, className }: Props) => {
 
   return (
     <p className={cn("text-2xl", className)}>
-      <span className="text-xs align-super">$</span>
+      <span className="text-xs align-super">₹</span>
       {integer}
       <span className="text-xs align-super">.{decimal}</span>
     </p>
