@@ -3,9 +3,9 @@ import sampleData from "./sample-data";
 
 async function main() {
   await prisma.product.deleteMany();
-  await prisma.product.createMany({
-    data: sampleData.products,
-  });
+  // await prisma.product.createMany({
+  //   data: sampleData.products,
+  // });
   console.log("Db seeded successfully!");
 }
 
@@ -24,5 +24,5 @@ async function seedUsers() {
   console.log("Users seeded successfully!");
 }
 
-main();
+// main();
 // seedUsers();

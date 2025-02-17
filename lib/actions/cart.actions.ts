@@ -83,6 +83,8 @@ export async function addItemToCart(data: CartItem) {
 
       return sendResponse(true, `${product.name} added to cart`);
     } else {
+
+      // the cart exists already
       // check if item already exists in cart
       const existItem = (cart.items as CartItem[]).find(
         (x) => x.productId === item.productId
