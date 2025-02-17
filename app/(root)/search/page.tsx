@@ -3,7 +3,6 @@ import {
   getAllCategories,
   getAllProducts,
 } from "@/lib/actions/product.actions";
-import { Value } from "@radix-ui/react-select";
 import Link from "next/link";
 
 interface Props {

@@ -203,7 +203,7 @@ export async function removeItemFromCart(productId: string) {
         (x) => x.productId !== exist.productId
       );
     } else {
-      // decrese qty
+      // decrease qty
       (cart.items as CartItem[]).find((x) => x.productId === productId)!.qty =
         exist.qty - 1;
     }

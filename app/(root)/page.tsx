@@ -6,7 +6,6 @@ import {
   getLatestProducts,
 } from "@/lib/actions/product.actions";
 import { Metadata } from "next";
-
 const HomePage = async () => {
   const latestProduct = await getLatestProducts();
   const featuredProducts = await getFeaturedProducts();
