@@ -83,7 +83,6 @@ export async function addItemToCart(data: CartItem) {
 
       return sendResponse(true, `${product.name} added to cart`);
     } else {
-
       // the cart exists already
       // check if item already exists in cart
       const existItem = (cart.items as CartItem[]).find(
@@ -129,7 +128,7 @@ export async function addItemToCart(data: CartItem) {
       );
     }
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return sendResponse(false, error);
   }
 }

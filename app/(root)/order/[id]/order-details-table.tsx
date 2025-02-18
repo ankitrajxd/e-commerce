@@ -15,8 +15,6 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import {
   checkRazorpayPayment,
-  // approvePaypalOrder,
-  // createPaypalOrder,
   createRazorpayOrder,
   deliverOrder,
   updateOrderToPaidCOD,
@@ -35,7 +33,7 @@ import { useRouter } from "nextjs-toploader/app";
 import { useState, useTransition } from "react";
 
 interface Props {
-  order: Order;
+  order: Omit<Order, "paymentResult">;
   paypalClientId: string;
   isAdmin: boolean;
   razorypayClientId: string;
@@ -48,7 +46,7 @@ const OrderDetailsTable = ({ order, isAdmin, razorypayClientId }: Props) => {
 
   const {
     shippingAddress,
-    orderItems,
+    OrderItems,
     itemsPrice,
     shippingPrice,
     taxPrice,
@@ -220,7 +218,7 @@ const OrderDetailsTable = ({ order, isAdmin, razorypayClientId }: Props) => {
                 </TableHeader>
 
                 <TableBody className="rounded-lg border">
-                  {orderItems.map((item) => (
+                  {OrderItems.map((item) => (
                     <TableRow key={item.slug}>
                       <TableCell>
                         <Link

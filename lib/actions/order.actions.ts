@@ -7,12 +7,13 @@ import { getMyCart } from "./cart.actions";
 import { getUserById } from "./user.actions";
 import { insertOrderSchema } from "../validators";
 import { prisma } from "@/db/prisma";
-import { CartItem, OrderItem, PaymentResult } from "@/types";
+import { CartItem, OrderItem, PaymentResult, ShippingAddress } from "@/types";
 import { revalidatePath } from "next/cache";
 import { PAGE_SIZE } from "../constants";
 import { Prisma } from "@prisma/client";
 import Razorpay from "razorpay";
 import crypto from "crypto";
+import { sendPurchaseReceipt } from "@/app/email";
 
 // create order and create the order items
 export const createOrder = async () => {
@@ -296,6 +297,14 @@ async function updateOrderToPaid({
   if (!updatedOrder) {
     throw new Error("Order not found");
   }
+
+  await sendPurchaseReceipt({
+    order: {
+      ...updatedOrder,
+      shippingAddress: updatedOrder.shippingAddress as ShippingAddress,
+      paymentResult: updatedOrder.paymentResult as PaymentResult,
+    },
+  });
 }
 
 // get user's orders
@@ -359,7 +368,9 @@ export async function getOrderSummary() {
   // get monthly sales
   const salesDataRaw = await prisma.$queryRaw<
     Array<{ month: string; totalSales: Prisma.Decimal }>
-  >` SELECT to_char("createdAt", 'MM/YY') as "month", sum("totalPrice") as "totalSales" FROM "Order" GROUP BY to_char("createdAt", 'MM/YY')`;
+  >` SELECT to_char("createdAt", 'MM/YY') as "month", sum("totalPrice") as "totalSales"
+       FROM "Order"
+       GROUP BY to_char("createdAt", 'MM/YY')`;
 
   const salesData: SalesDataType[] = salesDataRaw.map((item) => ({
     month: item.month,
@@ -612,7 +623,7 @@ export async function checkRazorpayPayment(
     razorpay_order_id: string;
     razorpay_payment_id: string;
     razorpay_signature: string;
-  }
+  },
 ) {
   try {
     const order = await prisma.order.findFirst({
@@ -630,7 +641,7 @@ export async function checkRazorpayPayment(
     const generatedSignature = crypto
       .createHmac("sha256", secret)
       .update(
-        `${paymentData.razorpay_order_id}|${paymentData.razorpay_payment_id}`
+        `${paymentData.razorpay_order_id}|${paymentData.razorpay_payment_id}`,
       )
       .digest("hex");
 
@@ -639,7 +650,7 @@ export async function checkRazorpayPayment(
     }
 
     // update order to paid
-    updateOrderToPaid({
+    await updateOrderToPaid({
       orderId,
       paymentResult: {
         id: paymentData.razorpay_payment_id,

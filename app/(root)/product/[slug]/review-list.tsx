@@ -25,8 +25,10 @@ const ReviewList = ({ userId, productSlug, productId }: Props) => {
   const [reviews, setReviews] = useState<Review[]>([]);
   console.log(userId, productSlug, productId);
 
-  function reload() {
+  async function reload() {
     console.log("Review Submitted");
+    const res = await getReviews({ productId });
+    setReviews([...res.data]);
   }
 
   useEffect(() => {
@@ -34,7 +36,7 @@ const ReviewList = ({ userId, productSlug, productId }: Props) => {
       const res = await getReviews({ productId });
       setReviews(res.data);
     };
-    loadReviews();
+    loadReviews().then((r) => null);
   }, [productId]);
 
   return (

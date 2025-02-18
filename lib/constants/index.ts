@@ -56,3 +56,5 @@ export const reviewFormDefault = {
   description: "This is a new review",
   rating: 5,
 };
+
+export const SENDER_EMAIL = process.env.SENDER_EMAIL || "onboarding@resend.dev";

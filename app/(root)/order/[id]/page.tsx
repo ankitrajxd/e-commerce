@@ -25,7 +25,7 @@ const OrderDetailsPage = async ({ params }: Props) => {
         order={{
           ...order,
           shippingAddress: order.shippingAddress as ShippingAddress,
-          orderItems: order.OrderItems as OrderItem[],
+          OrderItems: order.OrderItems as OrderItem[],
         }}
         paypalClientId={process.env.PAYPAL_CLIENT_ID || "sb"}
         razorypayClientId={process.env.NEXT_PUBLIC_KEY_ID || "rzp_test"}
