@@ -4,6 +4,7 @@ import {
   getAllProducts,
 } from "@/lib/actions/product.actions";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   searchParams: Promise<{
@@ -103,6 +104,8 @@ const SearchPage = async ({ searchParams }: Props) => {
     },
   ];
 
+  const ratings = [4, 3, 2, 1];
+
   return (
     <div className="grid md:grid-cols-5 md:gap-5">
       <div className="filter-links ">
@@ -147,9 +150,66 @@ const SearchPage = async ({ searchParams }: Props) => {
             </li>
           ))}
         </ul>
+        <div className="text-xl  mb-2 mt-12">Rating</div>
+
+        <ul className="space-y-1 list-none text-sm">
+          <li>
+            <Link
+              className={`${rating === "all" && "font-bold"}`}
+              href={getFilterUrl({ p: "all" })}
+            >
+              Any
+            </Link>
+          </li>
+
+          {ratings.map((r) => (
+            <li key={r}>
+              <Link
+                className={rating === r.toString() ? "text-blue-500" : ""}
+                href={getFilterUrl({ r: `${r}` })}
+              >
+                {`${r} starts & up`}
+              </Link>
+            </li>
+          ))}
+        </ul>
       </div>
 
       <div className="space-y-4 md:col-span-4">
+        <div className={"flex flex-between"}>
+          <div>
+            {q !== "all" && q !== "" && "Query: " + q}
+            {category !== "all" && category !== "" && "Category: " + category}
+            {price !== "all" && price !== "" && "Price: " + price}
+
+            {rating !== "all" && rating !== "" && "Rating: " + rating}
+
+            {/*  clear all filters*/}
+            {(q !== "" && q !== "all") ||
+              (category !== "all" && category !== "") ||
+              (rating !== "all" && rating !== "" && (
+                <Link href="/search">
+                  <Button className={"ml-2"} variant={"outline"} size={"sm"}>
+                    Clear
+                  </Button>
+                </Link>
+              ))}
+          </div>
+
+          {/*  sorting */}
+          <div className="flex gap-2.5">
+            {["Highest", "Lowest"].map((s, index) => (
+              <Link
+                className={`${s.toLowerCase() === sort && "font-bold"}`}
+                key={index}
+                href={getFilterUrl({ s: s.toLowerCase() })}
+              >
+                {s}
+              </Link>
+            ))}
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           {products.data.length === 0 && <div>No Products found</div>}
           {products.data.map((product) => (

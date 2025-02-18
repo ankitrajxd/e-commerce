@@ -2,7 +2,7 @@
 
 import { prisma } from "@/db/prisma";
 import { convertToPlainObject, formatError } from "../utils";
-import { LATEST_PRODUCTS_LIMIT, PAGE_SIZE } from "../constants";
+import { LATEST_PRODUCTS_LIMIT } from "../constants";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { insertProductSchema, updateProductSchema } from "../validators";
@@ -101,9 +101,12 @@ export async function getAllProducts({
     },
     skip: (page - 1) * limit,
     take: limit,
-    orderBy: {
-      createdAt: "desc",
-    },
+    orderBy:
+      sort === "lowest"
+        ? { price: "asc" }
+        : sort === "highest"
+          ? { price: "desc" }
+          : { createdAt: "desc" },
   });
 
   const dataCount = await prisma.product.count();
@@ -171,6 +174,7 @@ export async function createProduct(data: z.infer<typeof insertProductSchema>) {
     };
   }
 }
+
 // update a product
 export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
   try {

@@ -50,3 +50,9 @@ export const productDefaultValues = {
 };
 
 export const USER_ROLES = ["user", "admin"];
+
+export const reviewFormDefault = {
+  title: "new Review",
+  description: "This is a new review",
+  rating: 5,
+};

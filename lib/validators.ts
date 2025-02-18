@@ -6,7 +6,7 @@ const currency = z
   .string()
   .refine(
     (value) => /^\d+(\.\d{2})?$/.test(formatNumberWithDecimal(Number(value))),
-    "Price must be a valid number with two decimal places"
+    "Price must be a valid number with two decimal places",
   );
 
 // schema for inserting products
@@ -133,4 +133,13 @@ export const updateProfileSchema = z.object({
 export const userUpdateSchema = updateProfileSchema.extend({
   id: z.string().min(1, "User id is required"),
   role: z.string().min(1, "Role is required"),
+});
+
+// Schema for inserting reviews
+export const insertReviewSchema = z.object({
+  title: z.string().min(1, "Title must be at least 3 characters"),
+  description: z.string().min(3, "Description must be at least 3 characters"),
+  productId: z.string().min(1, "Product id is required"),
+  rating: z.coerce.number().int().min(1, "Rating must be at least 1"),
+  userId: z.string().min(1, "User id is required"),
 });

@@ -129,6 +129,7 @@ export async function addItemToCart(data: CartItem) {
       );
     }
   } catch (error) {
+    console.log(error)
     return sendResponse(false, error);
   }
 }
