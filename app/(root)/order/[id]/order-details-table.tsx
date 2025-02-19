@@ -31,6 +31,7 @@ import Link from "next/link";
 import Script from "next/script";
 import { useRouter } from "nextjs-toploader/app";
 import { useState, useTransition } from "react";
+import { Loader2 } from "lucide-react";
 
 interface Props {
   order: Omit<Order, "paymentResult">;
@@ -293,6 +294,7 @@ const OrderDetailsTable = ({ order, isAdmin, razorypayClientId }: Props) => {
                   disabled={isPending}
                   onClick={handleRzrpayPayment}
                 >
+                  {isPending && <Loader2 />}
                   {isPending ? "Processing..." : "Pay with Razorpay"}
                 </Button>
               </div>

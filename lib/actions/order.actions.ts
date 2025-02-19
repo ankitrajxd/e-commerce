@@ -660,6 +660,7 @@ export async function checkRazorpayPayment(
       },
     });
 
+    revalidatePath(`/order/${order.id}`);
     return {
       success: true,
       message: "Order paid successfully",
