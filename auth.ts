@@ -3,10 +3,8 @@
 import NextAuth, { NextAuthConfig } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "./db/prisma";
-import CredentialsProvider from "next-auth/providers/credentials";
 import { NextResponse } from "next/server";
 import Google from "next-auth/providers/google";
-import { compare } from "./lib/encrypt";
 
 export const config = {
   pages: {
@@ -21,45 +19,45 @@ export const config = {
   },
   adapter: PrismaAdapter(prisma),
   providers: [
-    CredentialsProvider({
-      credentials: {
-        email: { type: "email" },
-        password: { type: "password" },
-      },
+    // CredentialsProvider({
+    //   credentials: {
+    //     email: { type: "email" },
+    //     password: { type: "password" },
+    //   },
 
-      async authorize(credentials) {
-        if (credentials == null) {
-          return null;
-        }
+    //   async authorize(credentials) {
+    //     if (credentials == null) {
+    //       return null;
+    //     }
 
-        // find user in db
-        const user = await prisma.user.findFirst({
-          where: {
-            email: credentials.email as string,
-          },
-        });
+    //     // find user in db
+    //     const user = await prisma.user.findFirst({
+    //       where: {
+    //         email: credentials.email as string,
+    //       },
+    //     });
 
-        // check if user exists and if the password matches
-        if (user && user.password) {
-          const isMatch = await compare(
-            credentials.password as string,
-            user.password
-          );
-          // if password is correct return user
-          if (isMatch) {
-            return {
-              id: user.id,
-              name: user.name,
-              email: user.email,
-              role: user.role,
-            };
-          }
-        }
+    //     // check if user exists and if the password matches
+    //     if (user && user.password) {
+    //       const isMatch = await compare(
+    //         credentials.password as string,
+    //         user.password
+    //       );
+    //       // if password is correct return user
+    //       if (isMatch) {
+    //         return {
+    //           id: user.id,
+    //           name: user.name,
+    //           email: user.email,
+    //           role: user.role,
+    //         };
+    //       }
+    //     }
 
-        // if user does not exist or password does not match return null
-        return null;
-      },
-    }),
+    //     // if user does not exist or password does not match return null
+    //     return null;
+    //   },
+    // }),
     Google({
       allowDangerousEmailAccountLinking: true,
     }),
