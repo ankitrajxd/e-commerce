@@ -16,7 +16,7 @@ const HomePage = async () => {
         <ProductCarousel products={featuredProducts} />
       )}
       <ProductList data={latestProduct} title="Latest Products" />
-      <ViewAllProductsButton /> 
+      <ViewAllProductsButton />
     </div>
   );
 };

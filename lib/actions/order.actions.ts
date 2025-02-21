@@ -538,7 +538,7 @@ export async function deliverOrder(orderId: string) {
     revalidatePath(`/order/${orderId}`);
     return {
       success: true,
-      mesage: "Order has been marked delivered",
+      message: "Order has been marked delivered",
     };
   } catch (error) {
     return {
