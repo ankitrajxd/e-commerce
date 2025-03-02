@@ -111,7 +111,6 @@ const ProductDetailPage = async ({ params }: Props) => {
                   )}
 
                   {/* edit the product of admin only */}
-
                   {session?.user.role === "admin" && (
                     <Link className="" href={`/admin/products/${product.id}`}>
                       <Button className="mt-2" variant={"outline"} size={"sm"}>
