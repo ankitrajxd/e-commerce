@@ -15,157 +15,77 @@ Full-stack e-commerce application designed to provide a seamless shopping experi
 
 ## Screenshots - I Can't keeep this website up for long : )
 
-
 <div align="center">
 
 <details open>
 <summary><b>User Journey</b></summary>
 
-<div style="max-width: 800px; margin: 0 auto;">
+| ![Sign In Page](./public/images/website-ss/signinpage.png) |
+| :--------------------------------------------------------: |
+|  _Secure User Authentication with Email & Google Sign-In_  |
 
-<table>
-<tr>
-<td align="center">
-<img src="./public/images/website-ss/signinpage.png" width="85%" alt="Sign In Page"/>
-<p><em>Secure User Authentication with Email & Google Sign-In</em></p>
-</td>
-</tr>
-</table>
+| ![Home Page](./public/images/website-ss/homepage.png) |
+| :---------------------------------------------------: |
+| _Product Showcase with Categories and Featured Items_ |
 
-<table>
-<tr>
-<td align="center">
-<img src="./public/images/website-ss/homepage.png" width="85%" alt="Home Page"/>
-<p><em>Product Showcase with Categories and Featured Items</em></p>
-</td>
-</tr>
-</table>
+| ![Product Details](./public/images/website-ss/productDetailpage.png) |
+| :------------------------------------------------------------------: |
+|    _Detailed Product Information with Images and Specifications_     |
 
-<table>
-<tr>
-<td align="center">
-<img src="./public/images/website-ss/productDetailpage.png" width="85%" alt="Product Details"/>
-<p><em>Detailed Product Information with Images and Specifications</em></p>
-</td>
-</tr>
-</table>
+|    ![Shopping Cart](./public/images/website-ss/cartPage.png)    |
+| :-------------------------------------------------------------: |
+| _User-Friendly Cart with Quantity Controls and Price Breakdown_ |
 
-<table>
-<tr>
-<td align="center">
-<img src="./public/images/website-ss/cartPage.png" width="85%" alt="Shopping Cart"/>
-<p><em>User-Friendly Cart with Quantity Controls and Price Breakdown</em></p>
-</td>
-</tr>
-</table>
+| ![Address Page](./public/images/website-ss/address-page.png) |
+| :----------------------------------------------------------: |
+|           _Simple Address Collection for Shipping_           |
 
-<table>
-<tr>
-<td align="center">
-<img src="./public/images/website-ss/address-page.png" width="85%" alt="Address Page"/>
-<p><em>Simple Address Collection for Shipping</em></p>
-</td>
-</tr>
-</table>
+| ![Payment Method](./public/images/website-ss/payment-method.png) |
+| :--------------------------------------------------------------: |
+|       _Multiple Payment Options for Customer Convenience_        |
 
-<table>
-<tr>
-<td align="center">
-<img src="./public/images/website-ss/payment-method.png" width="85%" alt="Payment Method"/>
-<p><em>Multiple Payment Options for Customer Convenience</em></p>
-</td>
-</tr>
-</table>
+| ![Place Order](./public/images/website-ss/place-order.png) |
+| :--------------------------------------------------------: |
+|         _Order Summary Before Final Confirmation_          |
 
-<table>
-<tr>
-<td align="center">
-<img src="./public/images/website-ss/place-order.png" width="85%" alt="Place Order"/>
-<p><em>Order Summary Before Final Confirmation</em></p>
-</td>
-</tr>
-</table>
+| ![Razorpay Integration](./public/images/website-ss/razorpay.png) |
+| :--------------------------------------------------------------: |
+|            _Secure Payment Processing with Razorpay_             |
 
-<table>
-<tr>
-<td align="center">
-<img src="./public/images/website-ss/razorpay.png" width="85%" alt="Razorpay Integration"/>
-<p><em>Secure Payment Processing with Razorpay</em></p>
-</td>
-</tr>
-</table>
+| ![Order Success](./public/images/website-ss/order-success.png) |
+| :------------------------------------------------------------: |
+|           _Order Confirmation with Success Message_            |
 
-<table>
-<tr>
-<td align="center">
-<img src="./public/images/website-ss/order-success.png" width="85%" alt="Order Success"/>
-<p><em>Order Confirmation with Success Message</em></p>
-</td>
-</tr>
-</table>
+| ![Order Details](./public/images/website-ss/order-placed-details.png) |
+| :-------------------------------------------------------------------: |
+|               _Complete Order Information and Tracking_               |
 
-<table>
-<tr>
-<td align="center">
-<img src="./public/images/website-ss/order-placed-details.png" width="85%" alt="Order Details"/>
-<p><em>Complete Order Information and Tracking</em></p>
-</td>
-</tr>
-</table>
-
-</div>
 </details>
 
 <details>
 <summary><b>Admin Dashboard</b></summary>
 
-<div style="max-width: 800px; margin: 0 auto;">
+| ![Admin Dashboard](./public/images/website-ss/admin-dashboard.png) |
+| :----------------------------------------------------------------: |
+|        _Comprehensive Admin Dashboard with Sales Analytics_        |
 
-<table>
-<tr>
-<td align="center">
-<img src="./public/images/website-ss/admin-dashboard.png" width="85%" alt="Admin Dashboard"/>
-<p><em>Comprehensive Admin Dashboard with Sales Analytics</em></p>
-</td>
-</tr>
-</table>
+| ![Product Management](./public/images/website-ss/product-management.png) |
+| :----------------------------------------------------------------------: |
+|            _Complete Product Management with CRUD Operations_            |
 
-<table>
-<tr>
-<td align="center">
-<img src="./public/images/website-ss/product-management.png" width="85%" alt="Product Management"/>
-<p><em>Complete Product Management with CRUD Operations</em></p>
-</td>
-</tr>
-</table>
+| ![User Management](./public/images/website-ss/admin-users.png) |
+| :------------------------------------------------------------: |
+|        _User Management with Role-Based Access Control_        |
 
-<table>
-<tr>
-<td align="center">
-<img src="./public/images/website-ss/admin-users.png" width="85%" alt="User Management"/>
-<p><em>User Management with Role-Based Access Control</em></p>
-</td>
-</tr>
-</table>
-
-</div>
 </details>
 
 <details>
 <summary><b>Search Functionality</b></summary>
 
-<div style="max-width: 800px; margin: 0 auto;">
+| ![Search Feature](./public/images/website-ss/search.png) |
+| :------------------------------------------------------: |
+|    _Dynamic Search with Filters and Sorting Options_     |
 
-<table>
-<tr>
-<td align="center">
-<img src="./public/images/website-ss/search.png" width="85%" alt="Search Feature"/>
-<p><em>Dynamic Search with Filters and Sorting Options</em></p>
-</td>
-</tr>
-</table>
-
-</div>
 </details>
 
 </div>
